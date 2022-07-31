@@ -1,0 +1,12 @@
+*
+
+!/content-service/
+!/content-service/*
+!/content-service/**
+
+!/upload-service/
+!/upload-service/*
+!/upload-service/**
+
+!Makefile
+!.gitignore
