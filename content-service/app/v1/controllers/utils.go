@@ -25,3 +25,11 @@ func GetPagination(c *fiber.Ctx) service.Paginator {
 
 	return service.Paginator{Page: page, PageSize: pageSize}
 }
+
+func returnErrorMessage(c *fiber.Ctx, status int, message string) error {
+	return c.Status(status).JSON(
+		fiber.Map{
+			"message": message,
+		},
+	)
+}

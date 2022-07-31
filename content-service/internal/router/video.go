@@ -12,6 +12,7 @@ func (r VideoRouter) InstallRouter(api fiber.Router) {
 	video.Get("/", controllers.GetVideos)
 	video.Post("/", controllers.CreateVideo)
 	video.Put("/", controllers.UpdateVideo)
+	video.Post("/:id/published", controllers.PublishVideo)
 }
 
 func NewVideoRouter() *VideoRouter {

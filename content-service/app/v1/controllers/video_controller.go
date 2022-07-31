@@ -6,13 +6,14 @@ import (
 	"github.com/giovannitgl/video-services/content-service/internal/service"
 	"github.com/giovannitgl/video-services/content-service/internal/validator"
 	"github.com/gofiber/fiber/v2"
+	"strconv"
 	"time"
 )
 
 func GetVideos(c *fiber.Ctx) error {
 	pagination := GetPagination(c)
 	videos := service.VideoPaginatedFilter(pagination)
-	videoFormat := []schema.Video{}
+	var videoFormat []schema.Video
 	for _, v := range videos {
 		videoFormat = append(videoFormat, *schema.VideoResponse(v))
 	}
@@ -46,11 +47,7 @@ func CreateVideo(c *fiber.Ctx) error {
 
 	err := service.VideoCreate(&video)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(
-			fiber.Map{
-				"message": err.Error(),
-			},
-		)
+		return returnErrorMessage(c, fiber.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(schema.VideoResponse(video))
@@ -60,11 +57,7 @@ func UpdateVideo(c *fiber.Ctx) error {
 	videoUpdate := new(schema.VideoUpdate)
 
 	if err := c.BodyParser(videoUpdate); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(
-			fiber.Map{
-				"message": err.Error(),
-			},
-		)
+		return returnErrorMessage(c, fiber.StatusInternalServerError, err.Error())
 	}
 
 	errors := validator.ValidateModel(videoUpdate)
@@ -76,20 +69,44 @@ func UpdateVideo(c *fiber.Ctx) error {
 
 	video := service.VideoGetOne(videoUpdate.ID)
 	if video == nil {
-		return c.Status(fiber.StatusNotFound).JSON(
-			fiber.Map{
-				"message": "Video not found",
-			})
+		return returnErrorMessage(c, fiber.StatusNotFound, "video not found")
 	}
 	video.Title = videoUpdate.Title
 	video.Description = videoUpdate.Description
 
 	err := service.VideoUpdate(video)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(
-			fiber.Map{
-				"message": err.Error(),
-			})
+		return returnErrorMessage(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(schema.VideoResponse(*video))
+}
+
+func PublishVideo(c *fiber.Ctx) error {
+	params := c.AllParams()
+	videoId := params["id"]
+	videoIdInt, err := strconv.ParseUint(videoId, 10, 32)
+	if err != nil {
+		return returnErrorMessage(c, fiber.StatusBadRequest, "invalid id typem should be integer")
+	}
+
+	video := service.VideoGetOne(uint(videoIdInt))
+	if video == nil {
+		return returnErrorMessage(c, fiber.StatusNotFound, "video not found")
+	}
+
+	if video.Published {
+		return returnErrorMessage(c, fiber.StatusBadRequest, "video already published")
+	}
+
+	if video.VideoUrl == "" {
+		return returnErrorMessage(c, fiber.StatusBadRequest, "video pending file upload")
+	}
+
+	video.Published = true
+	err = service.VideoUpdate(video)
+	if err != nil {
+		return returnErrorMessage(c, fiber.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(schema.VideoResponse(*video))
