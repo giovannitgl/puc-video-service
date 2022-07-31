@@ -9,6 +9,7 @@ import (
 func main() {
 	config.SetupDatabase()
 	config.SetupMinio()
+	config.SetupPublisher()
 	app := upload.NewApplication()
 	log.Fatal(app.Listen(":8000"))
 }

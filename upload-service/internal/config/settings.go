@@ -15,6 +15,7 @@ const (
 	EnvMinioAccess   = "MINIO_ACCESSKEY"
 	EnvMinioSecret   = "MINIO_SECRETKEY"
 	EnvMinioBucket   = "MINIO_BUCKET"
+	EnvAmqpDsn       = "AMQP_DSN"
 )
 
 const (
@@ -25,6 +26,7 @@ const (
 	DefaultDbPassword    = "postgres"
 	DefaultMinioEndpoint = "localhost:9000"
 	DefaultMinioBucket   = "videos"
+	DefaultAmqpDsn       = "amqp://guest:guest@localhost:5672"
 )
 
 func init() {
@@ -35,6 +37,7 @@ func init() {
 	viper.SetDefault(EnvDbPassword, DefaultDbPassword)
 	viper.SetDefault(EnvMinioSecret, DefaultMinioEndpoint)
 	viper.SetDefault(EnvMinioBucket, DefaultMinioBucket)
+	viper.SetDefault(EnvAmqpDsn, DefaultAmqpDsn)
 	viper.AutomaticEnv()
 }
 
@@ -82,4 +85,8 @@ func MinioSecretKey() string {
 
 func MinioBucket() string {
 	return viper.GetString(EnvMinioBucket)
+}
+
+func AmqpDSN() string {
+	return viper.GetString(EnvAmqpDsn)
 }

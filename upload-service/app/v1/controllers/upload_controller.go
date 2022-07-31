@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/giovannitgl/video-services/content-service/internal/service"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"strconv"
 )
 
@@ -37,6 +38,11 @@ func UploadVideo(c *fiber.Ctx) error {
 
 	if err != nil {
 		return returnErrorMessage(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	err = service.SendVideoUploadedEvent(uint(videoIdInt), "")
+	if err != nil {
+		log.Printf("Could not send video upload event for id %d, %s", videoIdInt, err.Error())
 	}
 
 	return c.JSON(fiber.Map{
