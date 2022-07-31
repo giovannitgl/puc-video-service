@@ -18,11 +18,11 @@ const (
 const (
 	DefaultDbHost     = "localhost"
 	DefaultDbPort     = "5432"
-	DefaultDbName     = "content"
+	DefaultDbName     = "upload"
 	DefaultDbUser     = "postgres"
 	DefaultDbPassword = "postgres"
 	DefaultAmqpDsn    = "amqp://localhost:5672"
-	DefaultEventQueue = "content"
+	DefaultEventQueue = "upload"
 )
 
 func init() {

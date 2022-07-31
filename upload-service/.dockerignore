@@ -1,0 +1,13 @@
+*
+
+!/app/
+!/app/*
+!/app/**
+
+!/internal/
+!/internal/*
+!/internal/**
+
+!go.mod
+!go.sum
+!main.go
