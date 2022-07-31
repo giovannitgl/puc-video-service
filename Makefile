@@ -1,10 +1,10 @@
 all: build-docker-upload build-docker-content
 
 build-docker-upload:
-	cd upload-service && $(MAKE) all
+	cd upload-service && $(MAKE) docker-build
 
 build-docker-content:
-	cd content-service && $(MAKE) all
+	cd content-service && $(MAKE) docker-build
 
 clean-all: clean-content clean-upload
 
