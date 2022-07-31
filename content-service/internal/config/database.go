@@ -4,6 +4,7 @@ import (
 	"github.com/giovannitgl/video-services/content-service/internal/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 const (
@@ -20,7 +21,7 @@ var DB DBInstance
 func SetupDatabase() {
 	db, err := gorm.Open(postgres.Open(PostgresDSN()), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 	db.AutoMigrate(&entities.Video{})
 	DB = DBInstance{Db: db}
