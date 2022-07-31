@@ -9,7 +9,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /content-service
+RUN make build
 
 # Deploy stage
 FROM gcr.io/distroless/static AS final
