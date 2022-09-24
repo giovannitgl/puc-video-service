@@ -8,5 +8,9 @@
 !/upload-service/*
 !/upload-service/**
 
+!/user-service/
+!/user-service/*
+!/user-service/**
+
 !Makefile
 !.gitignore

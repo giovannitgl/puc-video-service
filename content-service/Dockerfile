@@ -16,14 +16,14 @@ COPY . ./
 RUN make build && ls
 
 # Deploy stage
-FROM gcr.io/distroless/static AS final
+FROM alpine:3.16.2 as final
 
 WORKDIR /app
 
-USER nonroot:nonroot
+RUN addgroup -S cetacean && adduser -S mobydick -G cetacean
 
-COPY --from=build --chown=nonroot:nonroot /app/content-service /app/content-service
+COPY --from=build --chown=mobydick:cetacean /app/content-service /app/content-service
 
-EXPOSE 8000
+USER mobydick
 
-ENTRYPOINT ["/content-service"]
+ENTRYPOINT ["/app/content-service"]

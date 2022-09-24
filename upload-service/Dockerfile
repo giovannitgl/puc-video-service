@@ -13,17 +13,17 @@ RUN go mod download
 
 COPY . ./
 
-RUN make build
+RUN make build && ls -l
 
 # Deploy stage
-FROM gcr.io/distroless/static AS final
+FROM alpine:3.16.2 as final
 
 WORKDIR /app
 
-USER nonroot:nonroot
+RUN addgroup -S cetacean && adduser -S mobydick -G cetacean
 
-COPY --from=build --chown=nonroot:nonroot /app/upload-service /app/upload-service
+COPY --from=build --chown=mobydick:cetacean /app/upload-service /app/upload-service
 
-EXPOSE 8000
+USER mobydick
 
-ENTRYPOINT ["/upload-service"]
+ENTRYPOINT ["/app/upload-service"]
