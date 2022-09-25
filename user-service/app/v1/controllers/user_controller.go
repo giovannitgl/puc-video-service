@@ -44,7 +44,7 @@ func LoginUser(c *fiber.Ctx) error {
 		)
 	}
 
-	err := userMngr.LoginUser(login.Email, login.Password)
+	token, err := userMngr.LoginUser(login.Email, login.Password)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(
 			fiber.Map{
@@ -55,7 +55,7 @@ func LoginUser(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(
 		fiber.Map{
-			"message": "logged in",
+			"token": token,
 		},
 	)
 

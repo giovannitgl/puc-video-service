@@ -12,5 +12,8 @@
 !/user-service/*
 !/user-service/**
 
+!/deployment/
+!/deployment/*
+
 !Makefile
 !.gitignore

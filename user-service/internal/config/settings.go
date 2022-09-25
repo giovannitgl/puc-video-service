@@ -12,6 +12,7 @@ const (
 	EnvDbUser     = "DB_USER"
 	EnvDbPassword = "DB_PASSWORD"
 	EnvSalt       = "SALT"
+	EnvSign       = "SIGNING_KEY"
 )
 
 const (
@@ -63,4 +64,8 @@ func PostgresDSN() string {
 
 func Salt() string {
 	return viper.GetString(EnvSalt)
+}
+
+func SigningKey() string {
+	return viper.GetString(EnvSign)
 }
